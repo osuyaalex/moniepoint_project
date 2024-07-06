@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nutrient/home_page.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final PageController pageController;
@@ -28,32 +28,36 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         width: MediaQuery.of(context).size.width*0.85,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         decoration:  BoxDecoration(
-          color: Colors.grey.shade900,
+          color: Colors.black,
          borderRadius: BorderRadius.circular(30)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem('assets/search-alt-svgrepo-com.svg', 0),
-            _buildNavItem('assets/chat-line-svgrepo-com.svg', 1),
-            _buildNavItem('assets/home-9-svgrepo-com.svg', 2,),
-            _buildNavItem('assets/heart-alt-svgrepo-com.svg', 3),
-            _buildNavItem('assets/profile-svgrepo-com.svg', 4),
+            _buildNavItem(Icons.chat_bubble_outline, 0),
+            _buildNavItem(Icons.chat, 1),
+            _buildNavItem(Icons.home, 2, isSpecial: true),
+            _buildNavItem(Icons.favorite_border, 3),
+            _buildNavItem(Icons.person_outline, 4),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(String icon, int index,) {
+  Widget _buildNavItem(IconData icon, int index, {bool isSpecial = false}) {
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: CircleAvatar(
         backgroundColor: _selectedIndex == index
-            ? Colors.orange
-            : Colors.black,
-        radius: 22,
-        child: SvgPicture.asset(icon, color: Colors.white, height: 24,)
+            ? (isSpecial ? Colors.orange : Colors.grey[700])
+            : Colors.transparent,
+        radius: isSpecial ? 30.0 : 25.0,
+        child: Icon(
+          icon,
+         // size: 15,
+          color: _selectedIndex == index ? Colors.white : Colors.grey,
+        ),
       ),
     );
   }
