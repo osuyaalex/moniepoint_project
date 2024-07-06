@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nutrient/home_page.dart';
 import 'package:nutrient/map_page.dart';
+import 'package:nutrient/Bottom%20Modal/modal_content.dart';
 
 import 'bottom_nav.dart';
 
@@ -15,73 +16,83 @@ class _ChangePageViewState extends State<ChangePageView> with SingleTickerProvid
   final PageController _pageController = PageController(initialPage: 2);
   OverlayEntry? _overlayEntry;
   double _bottom = -100; // Initially off the screen
+  bool _isModalVisible = true;
 
   _showBottomModal(){
-    Future.delayed(const Duration(milliseconds: 4500),(){
-      showGeneralDialog(
-        context: context,
-        barrierLabel: "Barrier",
-        barrierDismissible: true,
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: Duration(seconds: 1), // Animation duration
-        pageBuilder: (context, __, ___) {
-          return Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Material(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                      ),
-                      child: Center(
-                        child: Container(
-                          width: 40.0,
-                          height: 4.0,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(2.0),
+      Future.delayed(const Duration(milliseconds: 4500),(){
+        showGeneralDialog(
+          context: context,
+          barrierLabel: "Barrier",
+          barrierDismissible: false,
+          barrierColor: Colors.black.withOpacity(0.5),
+          transitionDuration: Duration(seconds: 1), // Animation duration
+          pageBuilder: (context, __, ___) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.55,
+                child: Material(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 40.0,
+                            height: 4.0,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(2.0),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Colors.white,
-                        child: Center(
-                          child: Text('Your Content Here'),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(12),
+                          color: Colors.white,
+                          child: SingleChildScrollView(child: ModalContent())
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-        transitionBuilder: (context, anim, __, child) {
-          return SlideTransition(
-            position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(anim),
-            child: child,
-          );
-        },
-      ).then((_){
-       // _overlayEntry?.remove();
-       // _overlayEntry = null;
-      });
-      Future.delayed(Duration(milliseconds: 700), (){
-        setState(() {
-          _bottom = 40; // Adjust this value to bring the bottom nav bar into view
-        });
-      });
-      _showOverlay(context);
+            );
+          },
+          transitionBuilder: (context, anim, __, child) {
 
-    });
+            if(anim.status == AnimationStatus.forward){
+              return SlideTransition(
+                position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(anim),
+                child: child,
+              );
+            }else{
+              return FadeTransition(
+                opacity: anim,
+                child: child,
+              );
+            }
+          },
+        ).then((_){
+          // _overlayEntry?.remove();
+          // _overlayEntry = null;
+        });
+        Future.delayed(Duration(milliseconds: 700), (){
+          setState(() {
+            _bottom = 40; // Adjust this value to bring the bottom nav bar into view
+          });
+        });
+        _showOverlay(context);
+
+      });
+
+
   }
 
   void _showOverlay(BuildContext context) {
@@ -98,6 +109,12 @@ class _ChangePageViewState extends State<ChangePageView> with SingleTickerProvid
     );
 
     Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _hideBottomModal() {
+    setState(() {
+      _isModalVisible = false;
+    });
   }
 
   @override
@@ -120,11 +137,19 @@ class _ChangePageViewState extends State<ChangePageView> with SingleTickerProvid
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
-          setState(() {
-            // Optional: Update selected index for other purposes if needed
-          });
+          if(index == 2){
+            _showBottomModal();
+            setState(() {
+              _isModalVisible = true;
+            });
+          }else{
+            if(_isModalVisible){
+              Navigator.pop(context);
+            }
+            _hideBottomModal();
+          }
         },
-        children: [
+        children:  [
           MapPage(),
           Center(child: Text('Chat Page', style: TextStyle(fontSize: 24.0))),
           HomePage(),

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:nutrient/container_animation.dart';
 import 'package:nutrient/text_animation.dart';
 
-import 'bottom_nav.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,7 +27,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   double circleAndSquareContainers = 0;
   bool _animateCircleSquareTexts = false;
   OverlayEntry? _overlayEntry;
-  final PageController _pageController = PageController(initialPage: 2);
 
   _firstContainer(){
     Future.delayed(Duration(seconds: 1),(){
@@ -84,84 +82,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
   }
 
-  _showBottomModal(){
-Future.delayed(const Duration(milliseconds: 4500),(){
-  showGeneralDialog(
-    context: context,
-    barrierLabel: "Barrier",
-    barrierDismissible: true,
-    barrierColor: Colors.black.withOpacity(0.5),
-    transitionDuration: Duration(seconds: 1), // Animation duration
-    pageBuilder: (context, __, ___) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: Material(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-            child: Column(
-              children: [
-                Container(
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                  ),
-                  child: Center(
-                    child: Container(
-                      width: 40.0,
-                      height: 4.0,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(2.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.white,
-                    child: Center(
-                      child: Text('Your Content Here'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-    transitionBuilder: (context, anim, __, child) {
-      return SlideTransition(
-        position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(anim),
-        child: child,
-      );
-    },
-  ).then((_){
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  });
-  Future.delayed(Duration(seconds: 5), () {
-    _showOverlay(context);
-  });
-});
-  }
 
-  void _showOverlay(BuildContext context) {
-    if (_overlayEntry != null) return;
 
-    _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: CustomBottomNavigationBar(pageController: _pageController),
-      ),
-    );
-
-    Overlay.of(context).insert(_overlayEntry!);
-  }
   @override
   void initState() {
     // TODO: implement initState
@@ -169,7 +91,6 @@ Future.delayed(const Duration(milliseconds: 4500),(){
     _firstContainer();
     _wordsBelowFirstContainer();
     _circleAndSquareContainerFunc();
-   //_showBottomModal();
   }
 
 
@@ -192,140 +113,178 @@ Future.delayed(const Duration(milliseconds: 4500),(){
       squareFormatNumber = _numberFormat.format(_squareAnimation!.value).replaceAll(',', ' ');
     }
     return Scaffold(
-      body: GestureDetector(
-        onVerticalDragStart: (v){
-          _showBottomModal();
-        },
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                veryLightGreyColor,
-                beigeColor.withOpacity(0.6),
-                brownGrayColor,
-              ],
-              stops: [0.3, 0.7, 1],
-            ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              veryLightGreyColor,
+              beigeColor.withOpacity(0.6),
+              brownGrayColor,
+            ],
+            stops: [0.3, 0.7, 1],
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width*0.15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AnimatedContainerWidget(
-                          padding: EdgeInsets.all(12),
-                          duration: const Duration(milliseconds: 1400),
-                          width: _animatedWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(17),
-                          ),
-                        child: AnimatedOpacity(
-                          opacity: _animatedOpacity,
-                          duration: const Duration(milliseconds: 600),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Icon(Icons.location_on, color: brownGrayColor,),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.width*0.15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AnimatedContainerWidget(
+                        padding: EdgeInsets.all(12),
+                        duration: const Duration(milliseconds: 1400),
+                        width: _animatedWidth,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                      child: AnimatedOpacity(
+                        opacity: _animatedOpacity,
+                        duration: const Duration(milliseconds: 600),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Icon(Icons.location_on, color: brownGrayColor,),
+                            ),
+                            Text('Saint Petersburg',
+                              style: TextStyle(
+                                  color: brownGrayColor
                               ),
-                              Text('Saint Petersburg',
-                                style: TextStyle(
-                                    color: brownGrayColor
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       ),
-                     AnimatedContainerWidget(
-                         padding: EdgeInsets.zero,
-                         duration: const Duration(seconds: 1),
-                         height: _circleSize,
-                         width: _circleSize,
-                       decoration: BoxDecoration(
-                           borderRadius: BorderRadius.circular(40),
-                           image: DecorationImage(
-                               image: NetworkImage(_profilePic)
-                           )
-                       ),
-                     )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  AnimatedContainerWidget(
-                      padding: EdgeInsets.zero,
-                      duration: const Duration(seconds: 1),
-                      height: _hiMarina,
-                      decoration: const BoxDecoration(),
-                    child: Text('Hi, Marina',
-                      style: TextStyle(
-                        color: brownGrayColor,
-                        fontSize: 25,
-                      ),
                     ),
-                  ),
-                  AnimatedContainerWidget(
+                   AnimatedContainerWidget(
+                       padding: EdgeInsets.zero,
+                       duration: const Duration(seconds: 1),
+                       height: _circleSize,
+                       width: _circleSize,
+                     decoration: BoxDecoration(
+                         borderRadius: BorderRadius.circular(40),
+                         image: DecorationImage(
+                             image: NetworkImage(_profilePic)
+                         )
+                     ),
+                   )
+                  ],
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                AnimatedContainerWidget(
                     padding: EdgeInsets.zero,
                     duration: const Duration(seconds: 1),
-                    height: _letsSelect,
+                    height: _hiMarina,
                     decoration: const BoxDecoration(),
-                    child: const Text('let\'s select your',
-                      style: TextStyle(
+                  child: Text('Hi, Marina',
+                    style: TextStyle(
+                      color: brownGrayColor,
+                      fontSize: 25,
+                    ),
+                  ),
+                ),
+                AnimatedContainerWidget(
+                  padding: EdgeInsets.zero,
+                  duration: const Duration(seconds: 1),
+                  height: _letsSelect,
+                  decoration: const BoxDecoration(),
+                  child: const Text('let\'s select your',
+                    style: TextStyle(
+                      fontSize: 35,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                ),
+                AnimatedContainerWidget(
+                  padding: EdgeInsets.zero,
+                  duration: const Duration(seconds: 1),
+                  height: _letsSelect,
+                  decoration: const BoxDecoration(),
+                  child: const Text('perfect place',
+                    style: TextStyle(
                         fontSize: 35,
-                          fontWeight: FontWeight.w500
-                      ),
+                        fontWeight: FontWeight.w500
                     ),
                   ),
-                  AnimatedContainerWidget(
-                    padding: EdgeInsets.zero,
-                    duration: const Duration(seconds: 1),
-                    height: _letsSelect,
-                    decoration: const BoxDecoration(),
-                    child: const Text('perfect place',
-                      style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.w500
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  Row(
-                    children: [
-                      AnimatedContainerWidget(
-                          padding: EdgeInsets.all(12),
-                          duration: Duration(seconds: 1),
-                          height: circleAndSquareContainers,
-                          width:  circleAndSquareContainers,
-                          decoration: BoxDecoration(
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                Row(
+                  children: [
+                    AnimatedContainerWidget(
+                        padding: EdgeInsets.all(12),
+                        duration: Duration(seconds: 1),
+                        height: circleAndSquareContainers,
+                        width:  circleAndSquareContainers,
+                        decoration: BoxDecoration(
 
-                            borderRadius: BorderRadius.circular(120),
-                            color: orangeColor
-                          ),
+                          borderRadius: BorderRadius.circular(120),
+                          color: orangeColor
+                        ),
+                      child:  Center(
+                        child: Column(
+                          children: [
+                            TextAnimation(
+                                boolAnimate: _animateCircleSquareTexts,
+                                number: 14,
+                                color: Colors.white,
+                                text: 'BUY'
+                            ),
+                            AnimatedContainer(
+                              height: _animateCircleSquareTexts?MediaQuery.of(context).size.width*0.1:1,
+                              duration: const Duration(seconds: 1),
+                            ),
+                            TextAnimation(
+                                boolAnimate: _animateCircleSquareTexts,
+                                number: 34,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                text: _circleAnimation!= null?
+                                circleFormatNumber:'0'
+                            ),
+                            TextAnimation(
+                                boolAnimate: _animateCircleSquareTexts,
+                                number: 14,
+                                color: Colors.white,
+                                text: 'offers'
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: AnimatedContainerWidget(
+                        padding: EdgeInsets.all(12),
+                        duration: Duration(seconds: 1),
+                        height: circleAndSquareContainers,
+                        width:  circleAndSquareContainers,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: Colors.white
+                        ),
                         child:  Center(
                           child: Column(
                             children: [
+                             // Text(_animateCircleSquareTexts.toString()),
                               TextAnimation(
                                   boolAnimate: _animateCircleSquareTexts,
                                   number: 14,
-                                  color: Colors.white,
-                                  text: 'BUY'
+                                  color: brownGrayColor,
+                                  text: 'RENT'
                               ),
                               AnimatedContainer(
                                 height: _animateCircleSquareTexts?MediaQuery.of(context).size.width*0.1:1,
@@ -334,73 +293,29 @@ Future.delayed(const Duration(milliseconds: 4500),(){
                               TextAnimation(
                                   boolAnimate: _animateCircleSquareTexts,
                                   number: 34,
-                                  color: Colors.white,
+                                  color: brownGrayColor,
                                   fontWeight: FontWeight.w600,
-                                  text: _circleAnimation!= null?
-                                  circleFormatNumber:'0'
+                                  text: _squareAnimation!= null?
+                                  squareFormatNumber:'0'
                               ),
                               TextAnimation(
                                   boolAnimate: _animateCircleSquareTexts,
                                   number: 14,
-                                  color: Colors.white,
+                                  color: brownGrayColor,
                                   text: 'offers'
                               ),
                             ],
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: AnimatedContainerWidget(
-                          padding: EdgeInsets.all(12),
-                          duration: Duration(seconds: 1),
-                          height: circleAndSquareContainers,
-                          width:  circleAndSquareContainers,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: Colors.white
-                          ),
-                          child:  Center(
-                            child: Column(
-                              children: [
-                               // Text(_animateCircleSquareTexts.toString()),
-                                TextAnimation(
-                                    boolAnimate: _animateCircleSquareTexts,
-                                    number: 14,
-                                    color: brownGrayColor,
-                                    text: 'RENT'
-                                ),
-                                AnimatedContainer(
-                                  height: _animateCircleSquareTexts?MediaQuery.of(context).size.width*0.1:1,
-                                  duration: const Duration(seconds: 1),
-                                ),
-                                TextAnimation(
-                                    boolAnimate: _animateCircleSquareTexts,
-                                    number: 34,
-                                    color: brownGrayColor,
-                                    fontWeight: FontWeight.w600,
-                                    text: _squareAnimation!= null?
-                                    squareFormatNumber:'0'
-                                ),
-                                TextAnimation(
-                                    boolAnimate: _animateCircleSquareTexts,
-                                    number: 14,
-                                    color: brownGrayColor,
-                                    text: 'offers'
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
+                ),
 
-                ],
-              ),
+              ],
             ),
-          )
-        ),
+          ),
+        )
       ),
     );
   }
