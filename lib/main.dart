@@ -5,7 +5,7 @@ import 'package:nutrient/bottom_nav.dart';
 import 'package:nutrient/home_page.dart';
 import 'package:nutrient/page_view.dart';
 
-import 'first_screen.dart';
+import 'unused/first_screen';
 
 void main() {
   runApp(const MyApp());
