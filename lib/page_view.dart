@@ -24,13 +24,13 @@ class _ChangePageViewState extends State<ChangePageView> with SingleTickerProvid
           context: context,
           barrierLabel: "Barrier",
           barrierDismissible: false,
-          barrierColor: Colors.black.withOpacity(0.5),
+          barrierColor: Colors.transparent,
           transitionDuration: Duration(seconds: 1), // Animation duration
           pageBuilder: (context, __, ___) {
             return Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.55,
+                height: MediaQuery.of(context).size.height * 0.41,
                 child: Material(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                   child: Column(
