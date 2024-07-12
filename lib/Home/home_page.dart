@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nutrient/container_animation.dart';
-import 'package:nutrient/text_animation.dart';
+import 'package:nutrient/Home/container_animation.dart';
+import 'package:nutrient/Home/text_animation.dart';
 
 
 class HomePage extends StatefulWidget {

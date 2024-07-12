@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nutrient/home_page.dart';
-import 'package:nutrient/map_page.dart';
+import 'package:nutrient/Home/home_page.dart';
+import 'package:nutrient/Map%20Page/map_page.dart';
 import 'package:nutrient/Bottom%20Modal/modal_content.dart';
 
 import 'bottom_nav.dart';

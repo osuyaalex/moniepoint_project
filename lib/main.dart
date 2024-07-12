@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nutrient/bottom_nav.dart';
-import 'package:nutrient/home_page.dart';
-import 'package:nutrient/page_view.dart';
+import 'package:nutrient/Bottom%20Modal/bottom_nav.dart';
+import 'package:nutrient/Home/home_page.dart';
+import 'package:nutrient/Bottom%20Modal/page_view.dart';
 
 import 'unused/first_screen';
 
